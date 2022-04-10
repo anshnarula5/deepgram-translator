@@ -1,5 +1,5 @@
 import "./App.css";
-import {  Container, Form, Row } from "react-bootstrap";
+import { Button, Col, Container, Form, Navbar, Row } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -8,8 +8,6 @@ function App() {
   const [translatedText, setTranslatedText] = useState("");
   const [languages, setLanguages] = useState([]);
   const [selectedLanguageKey, setLanguageKey] = useState("");
-
-  // configuring mic
 
   let mediaRecorder = null;
   const allowAudio = async () => {
@@ -28,12 +26,12 @@ function App() {
     if (mediaRecorder) {
       const socket = new WebSocket("wss://api.deepgram.com/v1/listen", [
         "token",
-       "83e2dc86e2216d640718db8969c7c149452ccc92",
+        "0b6a8377dfa1e87b54a0abd7aa867b5d3a11c310",
       ]);
       socket.onopen = () => {
         console.log("Started");
         mediaRecorder.addEventListener("dataavailable", async (e) => {
-          if (e.data.size > 0 && socket.readyState === 1) {
+          if (e.data.size > 0 && socket.readyState == 1) {
             socket.send(e.data);
           }
         });
@@ -58,8 +56,6 @@ function App() {
     await handleSpeak();
   };
 
-  // translate text
-
   const translate = async () => {
     let data = {
       q: text,
@@ -70,12 +66,11 @@ function App() {
       setTranslatedText(response.data.translatedText);
     });
   };
-  useEffect(() => {
+ useEffect(() => {
     axios.get(`https://libretranslate.de/languages`).then((response) => {
       setLanguages(response.data);
     });
   }, []);
-
   useEffect(() => {
     translate();
   }, [text, selectedLanguageKey]);
@@ -84,7 +79,7 @@ function App() {
     audioHandler();
   }, []);
 
-  const languageKeyHandler = (selectedLanguage) => {
+  const languageKey = (selectedLanguage) => {
     setLanguageKey(selectedLanguage.target.value);
   };
 
@@ -97,7 +92,7 @@ function App() {
             <p>{!text ? <p className="text-muted">Make sure your mic is on</p> : text}</p>
           </Row>
           <Row className="row">
-            <p>{!selectedLanguageKey && <p className="text-muted">Select a language first</p> }
+            <p>{!selectedLanguageKey && <p className="text-muted">Select a langouage first</p> }
               {selectedLanguageKey && translatedText ? (
                 translatedText
               ) : !translatedText && text ? (
@@ -107,7 +102,7 @@ function App() {
               )}
             </p>
           </Row>
-          <Form.Select onChange={languageKeyHandler} className="mt-5">
+          <Form.Select onChange={languageKey} className="mt-5">
             <option>Please Select Language..</option>
             {languages.map((language) => {
               return <option value={language.code}>{language.name}</option>;
