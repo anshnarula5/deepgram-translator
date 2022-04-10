@@ -28,7 +28,7 @@ function App() {
     if (mediaRecorder) {
       const socket = new WebSocket("wss://api.deepgram.com/v1/listen", [
         "token",
-        process.env.DG_KEY,
+       "83e2dc86e2216d640718db8969c7c149452ccc92",
       ]);
       socket.onopen = () => {
         console.log("Started");
