@@ -78,11 +78,11 @@ function App() {
 
   useEffect(() => {
     translate();
-  }, [text, selectedLanguageKey, translate]);
+  }, [text, selectedLanguageKey]);
 
   useEffect(() => {
     audioHandler();
-  }, [audioHandler]);
+  }, []);
 
   const languageKeyHandler = (selectedLanguage) => {
     setLanguageKey(selectedLanguage.target.value);
