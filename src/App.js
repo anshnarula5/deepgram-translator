@@ -28,12 +28,12 @@ function App() {
     if (mediaRecorder) {
       const socket = new WebSocket("wss://api.deepgram.com/v1/listen", [
         "token",
-        "0b6a8377dfa1e87b54a0abd7aa867b5d3a11c310",
+        process.env.DG_KEY,
       ]);
       socket.onopen = () => {
         console.log("Started");
         mediaRecorder.addEventListener("dataavailable", async (e) => {
-          if (e.data.size > 0 && socket.readyState == 1) {
+          if (e.data.size > 0 && socket.readyState === 1) {
             socket.send(e.data);
           }
         });
@@ -78,11 +78,11 @@ function App() {
 
   useEffect(() => {
     translate();
-  }, [text, selectedLanguageKey]);
+  }, [text, selectedLanguageKey, translate]);
 
   useEffect(() => {
     audioHandler();
-  }, []);
+  }, [audioHandler]);
 
   const languageKeyHandler = (selectedLanguage) => {
     setLanguageKey(selectedLanguage.target.value);
@@ -97,7 +97,7 @@ function App() {
             <p>{!text ? <p className="text-muted">Make sure your mic is on</p> : text}</p>
           </Row>
           <Row className="row">
-            <p>{!selectedLanguageKey && <p className="text-muted">Select a langouage first</p> }
+            <p>{!selectedLanguageKey && <p className="text-muted">Select a language first</p> }
               {selectedLanguageKey && translatedText ? (
                 translatedText
               ) : !translatedText && text ? (
